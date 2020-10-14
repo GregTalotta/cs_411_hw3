@@ -4,7 +4,9 @@
 //
 // For CS 411 Fall 2020
 // Used in Assignment 3, Exercise B
-// modified from: merge_sort.cpp
+
+// modified from:
+//      merge_sort.cpp
 //      Glenn G. Chappell
 //      9 Oct 2015
 //
