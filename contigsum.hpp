@@ -14,7 +14,7 @@ int max(int first, int second, int third)
     {
         return first;
     }
-    else if (second > third)
+    else if (second >= third)
     {
         return second;
     }
@@ -31,7 +31,7 @@ int contigSum(RAIter first, RAIter last)
     {
         return 0;
     }
-    if (last - first == 1) // check if empty set
+    if (last - first == 1) // check if only 1 element
     {
         if (*first > 0)
         {
@@ -44,9 +44,38 @@ int contigSum(RAIter first, RAIter last)
     }
     else
     {
-        int right = contigSum(first, (first + (last - first) / 2));
-        int left = contigSum((first + (last - first) / 2) + 1, last);
-        int crossing = 0; //biggest to the right and left
+        int left = contigSum(first, (first + (last - first) / 2));
+        int right = contigSum((first + (last - first) / 2) + 1, last);
+        int total = 0;
+        int left_mid = 0;
+        for (auto it = (first + (last - first) / 2); it != first + 1; it--)
+        {
+            total += *it;
+            if (total > left_mid)
+            {
+                left_mid = total;
+            }
+        }
+        if (left_mid < 0)
+        {
+            left_mid = 0;
+        }
+        total = 0;
+        int right_mid = 0;
+        for (auto it = (first + (last - first) / 2) + 1; it != last; it++)
+        {
+            total += *it;
+            if (total > right_mid)
+            {
+                right_mid = total;
+            }
+        }
+        if (right_mid < 0)
+        {
+            right_mid = 0;
+        }
+        int crossing = left_mid + right_mid; //biggest to the right and left
+
         return max(right, left, crossing);
     }
 }
