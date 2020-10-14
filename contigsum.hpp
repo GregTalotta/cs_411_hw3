@@ -8,6 +8,22 @@
 #ifndef FILE_CONTIGSUM_HPP_INCLUDED
 #define FILE_CONTIGSUM_HPP_INCLUDED
 
+int max(int first, int second, int third)
+{
+    if ((first >= second) && (first >= third))
+    {
+        return first;
+    }
+    else if (second > third)
+    {
+        return second;
+    }
+    else
+    {
+        return third;
+    }
+}
+
 template <typename RAIter>
 int contigSum(RAIter first, RAIter last)
 {
@@ -15,17 +31,24 @@ int contigSum(RAIter first, RAIter last)
     {
         return 0;
     }
-    if ((last-first==1) && (*first > 0)) // check if empty set
+    if (last - first == 1) // check if empty set
     {
-        return *first;
+        if (*first > 0)
+        {
+            return *first;
+        }
+        else
+        {
+            return 0;
+        }
     }
     else
     {
-        return 0;
+        int right = contigSum(first, (first + (last - first) / 2));
+        int left = contigSum((first + (last - first) / 2) + 1, last);
+        int crossing = 0; //biggest to the right and left
+        return max(right, left, crossing);
     }
-    int right = contigSum(first, (first + (last - first) / 2));
-    int left = contigSum((first + (last - first) / 2) + 1, last);
-    int crossing = 0; //?
 }
 
 #endif //#ifndef FILE_CONTIGSUM_HPP_INCLUDED
