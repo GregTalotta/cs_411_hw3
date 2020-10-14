@@ -30,12 +30,6 @@ using std::distance;
 using std::remove_reference;
 
 template <typename RAIter>
-size_t inversions(RAIter first, RAIter last)
-{
-    return 0;
-}
-
-template <typename RAIter>
 size_t stableMerge(RAIter first, RAIter middle, RAIter last)
 {
     using Value = typename remove_reference<decltype(*first)>::type;
@@ -54,6 +48,36 @@ size_t stableMerge(RAIter first, RAIter middle, RAIter last)
     copy(in1, middle, out);
     copy(in2, last, out);
     copy(buffer.begin(), buffer.end(), first);
+    return distance(first, last);
+}
+
+template <typename RAIter>
+size_t mergeSort(RAIter first, RAIter last)
+{
+    // Compute size of sequence
+    size_t size = distance(first, last);
+
+    // BASE CASE
+    if (size <= 1)
+        return 0;
+
+    // RECURSIVE CASE
+    RAIter middle = first;
+    advance(middle, size / 2); // middle is iterator to middle of range
+
+    // Recursively sort the two lists
+    mergeSort(first, middle);
+    mergeSort(middle, last);
+
+    // And merge them
+    stableMerge(first, middle, last);
+    return size;
+}
+
+template <typename RAIter>
+size_t inversions(RAIter first, RAIter last)
+{
+    return mergeSort(first, last);
 }
 
 #endif //#ifndef FILE_INVERSIONS_HPP_INCLUDED
