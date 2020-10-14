@@ -37,18 +37,22 @@ size_t stableMerge(RAIter first, RAIter middle, RAIter last)
     RAIter in1 = first;
     RAIter in2 = middle;
     auto out = buffer.begin();
+    size_t total = 0;
     while (in1 != middle && in2 != last)
     {
         if (*in2 < *in1)
-            *out++ = *in2++;
+        {
+            *(out++) = *(in2++);
+            total += 1;
+        }
         else
-            *out++ = *in1++;
+            *(out++) = *(in1++);
     }
 
     copy(in1, middle, out);
     copy(in2, last, out);
     copy(buffer.begin(), buffer.end(), first);
-    return distance(first, last);
+    return total;
 }
 
 template <typename RAIter>
@@ -64,14 +68,8 @@ size_t mergeSort(RAIter first, RAIter last)
     // RECURSIVE CASE
     RAIter middle = first;
     advance(middle, size / 2); // middle is iterator to middle of range
-
-    // Recursively sort the two lists
-    mergeSort(first, middle);
-    mergeSort(middle, last);
-
-    // And merge them
-    stableMerge(first, middle, last);
-    return size;
+    return mergeSort(first, middle) + mergeSort(middle, last) + stableMerge(first, middle, last);
+    ;
 }
 
 template <typename RAIter>
