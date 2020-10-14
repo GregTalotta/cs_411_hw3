@@ -8,6 +8,20 @@
 #ifndef FILE_CONTIGSUM_HPP_INCLUDED
 #define FILE_CONTIGSUM_HPP_INCLUDED
 
+#include <vector>
+using std::vector;
+int max(int first, int second)
+{
+    if (first >= second)
+    {
+        return first;
+    }
+    else
+    {
+        return second;
+    }
+}
+
 int max(int first, int second, int third)
 {
     if ((first >= second) && (first >= third))
@@ -25,59 +39,41 @@ int max(int first, int second, int third)
 }
 
 template <typename RAIter>
-int contigSum(RAIter first, RAIter last)
+vector<int> example_algorithm(RAIter first, RAIter last)
 {
-    if (first == last) // check if empty set
+    if (first == last)
     {
-        return 0;
+        vector<int> results = {0, 0, 0, 0};
+        return results;
     }
-    if (last - first == 1) // check if only 1 element
+    else if (last - first == 1)
     {
         if (*first > 0)
         {
-            return *first;
+            vector<int> results = {*first, *first, *first, *first};
+            return results;
         }
         else
         {
-            return 0;
+            vector<int> results = {0, 0, 0, 0};
+            return results;
         }
     }
-    else
-    {
-        int left = contigSum(first, (first + (last - first) / 2));
-        int right = contigSum((first + (last - first) / 2) + 1, last);
-        int total = 0;
-        int left_mid = 0;
-        for (auto it = (first + (last - first) / 2); it != first + 1; it--)
-        {
-            total += *it;
-            if (total > left_mid)
-            {
-                left_mid = total;
-            }
-        }
-        if (left_mid < 0)
-        {
-            left_mid = 0;
-        }
-        total = 0;
-        int right_mid = 0;
-        for (auto it = (first + (last - first) / 2) + 1; it != last; it++)
-        {
-            total += *it;
-            if (total > right_mid)
-            {
-                right_mid = total;
-            }
-        }
-        if (right_mid < 0)
-        {
-            right_mid = 0;
-        }
-        int crossing = left_mid + right_mid; //biggest to the right and left
+    vector<int> results;
+    vector<int> left = example_algorithm(first, first + ((last - first) / 2));
+    vector<int> right = example_algorithm(first + ((last - first) / 2) + 1, last);
+    results.push_back(max(left[0], right[0], (left[2] + right[1])));
+    results.push_back(max(left[1], (left[3] + right[1])));
+    results.push_back(max(right[2], (right[3] + left[2])));
+    results.push_back(left[3] + right[3]);
+    return results;
+}
 
-        return max(right, left, crossing);
-    }
+template <typename RAIter>
+int contigSum(RAIter first, RAIter last)
+{
+    vector<int> results = example_algorithm(first, last);
+    return results[0];
 }
 
 #endif //#ifndef FILE_CONTIGSUM_HPP_INCLUDED
