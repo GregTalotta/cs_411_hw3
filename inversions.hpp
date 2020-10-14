@@ -13,10 +13,6 @@
 #ifndef FILE_INVERSIONS_HPP_INCLUDED
 #define FILE_INVERSIONS_HPP_INCLUDED
 
-#include <iostream>
-using std::cin;
-using std::cout;
-using std::endl;
 #include <vector>
 using std::vector;
 #include <cstddef>
@@ -42,13 +38,14 @@ size_t stableMerge(RAIter first, RAIter middle, RAIter last)
     {
         if (*in2 < *in1)
         {
-            *(out++) = *(in2++);
-            total += 1;
+            total += distance(in1, middle);
+            *out++ = *in2++;
         }
         else
-            *(out++) = *(in1++);
+        {
+            *out++ = *in1++;
+        }
     }
-
     copy(in1, middle, out);
     copy(in2, last, out);
     copy(buffer.begin(), buffer.end(), first);
@@ -56,26 +53,14 @@ size_t stableMerge(RAIter first, RAIter middle, RAIter last)
 }
 
 template <typename RAIter>
-size_t mergeSort(RAIter first, RAIter last)
-{
-    // Compute size of sequence
-    size_t size = distance(first, last);
-
-    // BASE CASE
-    if (size <= 1)
-        return 0;
-
-    // RECURSIVE CASE
-    RAIter middle = first;
-    advance(middle, size / 2); // middle is iterator to middle of range
-    return mergeSort(first, middle) + mergeSort(middle, last) + stableMerge(first, middle, last);
-    ;
-}
-
-template <typename RAIter>
 size_t inversions(RAIter first, RAIter last)
 {
-    return mergeSort(first, last);
+    size_t size = distance(first, last);
+    if (size <= 1)
+        return 0;
+    RAIter middle = first;
+    advance(middle, size / 2);
+    return (inversions(first, middle) + inversions(middle, last) + stableMerge(first, middle, last));
 }
 
 #endif //#ifndef FILE_INVERSIONS_HPP_INCLUDED
