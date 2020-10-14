@@ -48,7 +48,7 @@ int contigSum(RAIter first, RAIter last)
         int right = contigSum((first + (last - first) / 2) + 1, last);
         int total = 0;
         int left_mid = 0;
-        for (auto it = (first + (last - first) / 2); it != first - 1; it--)
+        for (auto it = (first + (last - first) / 2); it != first; it--)
         {
             total += *it;
             if (total > left_mid)
@@ -56,6 +56,11 @@ int contigSum(RAIter first, RAIter last)
                 left_mid = total;
             }
         }
+		total += *first;
+		if (total > left_mid)
+		{
+			left_mid = total;
+		}
         if (left_mid < 0)
         {
             left_mid = 0;
