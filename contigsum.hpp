@@ -37,19 +37,26 @@ int max(int first, int second, int third)
         return third;
     }
 }
-
-int gcs_two(int first, int second)
+int above_0(int test)
 {
-    int gcs = max(first + second, first, second);
-    if (gcs > 0)
+    if (test > 0)
     {
-        return gcs;
-    }
-    else
-    {
-        return 0;
+        return test;
     }
     return 0;
+}
+vector<int> gcs_two(int first, int second)
+{
+    int gcs = max(first + second, first, second);
+    if ((gcs > 0) && (gcs != first) && gcs != second)
+    {
+        return {gcs, gcs, gcs, gcs};
+    }
+    else if (gcs > 0)
+    {
+        return {gcs, first, second, above_0(first + second)};
+    }
+    return {0, 0, 0, 0};
 }
 
 template <typename RAIter>
@@ -57,13 +64,22 @@ vector<int> example_algorithm(RAIter first, RAIter last)
 {
     if (first == last)
     {
-        vector<int> results = {0, 0, 0, 0};
-        return results;
+        return {0, 0, 0, 0};
     }
     else if (last - first == 2)
     {
-        vector<int> results = {gcs_two(*first, *(first +1)), *first, *(first + 1), (*first + *(first + 1))};
-        return results;
+        return gcs_two(*first, *(first + 1));
+    }
+    else if (last - first == 1)
+    {
+        if (*first > 0)
+        {
+            return {*first, *first, *first, *first};
+        }
+        else
+        {
+            return {0, 0, 0, 0};
+        }
     }
     vector<int> results;
     vector<int> left = example_algorithm(first, first + ((last - first) / 2));
