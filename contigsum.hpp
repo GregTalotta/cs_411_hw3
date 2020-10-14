@@ -9,6 +9,7 @@
 #define FILE_CONTIGSUM_HPP_INCLUDED
 
 #include <vector>
+#include <iostream>
 using std::vector;
 int max(int first, int second)
 {
@@ -37,6 +38,7 @@ int max(int first, int second, int third)
         return third;
     }
 }
+
 int above_0(int test)
 {
     if (test > 0)
@@ -44,19 +46,6 @@ int above_0(int test)
         return test;
     }
     return 0;
-}
-vector<int> gcs_two(int first, int second)
-{
-    int gcs = max(first + second, first, second);
-    if ((gcs > 0) && (gcs != first) && gcs != second)
-    {
-        return {gcs, gcs, gcs, gcs};
-    }
-    else if (gcs > 0)
-    {
-        return {gcs, first, second, above_0(first + second)};
-    }
-    return {0, 0, 0, 0};
 }
 
 template <typename RAIter>
@@ -66,24 +55,13 @@ vector<int> example_algorithm(RAIter first, RAIter last)
     {
         return {0, 0, 0, 0};
     }
-    else if (last - first == 2)
+    if (last - first == 1)
     {
-        return gcs_two(*first, *(first + 1));
-    }
-    else if (last - first == 1)
-    {
-        if (*first > 0)
-        {
-            return {*first, *first, *first, *first};
-        }
-        else
-        {
-            return {0, 0, 0, 0};
-        }
+        return {above_0(*first), above_0(*first), above_0(*first), *first};
     }
     vector<int> results;
-    vector<int> left = example_algorithm(first, first + ((last - first) / 2));
-    vector<int> right = example_algorithm(first + ((last - first) / 2) + 1, last);
+    vector<int> left = example_algorithm(first, (first + ((last - first) / 2)));
+    vector<int> right = example_algorithm((first + ((last - first) / 2)), last);
     results.push_back(max(left[0], right[0], (left[2] + right[1])));
     results.push_back(max(left[1], (left[3] + right[1])));
     results.push_back(max(right[2], (right[3] + left[2])));
