@@ -60,8 +60,8 @@ vector<int> example_algorithm(RAIter first, RAIter last)
     {
         return {above_0(*first), above_0(*first), above_0(*first), *first};
     }
-    vector<int> left = example_algorithm(first, (first + ((last - first) / 2)));
-    vector<int> right = example_algorithm((first + ((last - first) / 2)), last);
+    vector<int> left = example_algorithm(first, first + ((last - first) / 2));
+    vector<int> right = example_algorithm(first + ((last - first) / 2), last);
     return {(max(left[0], right[0], (left[2] + right[1]))), (max(left[1], (left[3] + right[1]))), (max(right[2], (right[3] + left[2]))), (left[3] + right[3])};
 }
 
