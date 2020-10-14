@@ -9,7 +9,6 @@
 #define FILE_CONTIGSUM_HPP_INCLUDED
 
 #include <vector>
-#include <iostream>
 using std::vector;
 
 int max(int first, int second)
